@@ -1,6 +1,6 @@
 export type BaseData = {
   [key: string]: number;
-}
+};
 
 export type Item = {
   name: string;

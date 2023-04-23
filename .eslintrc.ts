@@ -1,15 +1,16 @@
-module.exports = {
+export default {
   env: {
-    browser: true,
-    es2021: true
+    browser: false,
+    es2021: true,
   },
-  extends: 'standard-with-typescript',
-  overrides: [
-  ],
+  extends: ["standard-with-typescript", "plugin:prettier/recommended"],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+    ecmaVersion: "latest",
+    sourceType: "module",
   },
   rules: {
-  }
-}
+    "prettier/prettier": "error",
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
+  },
+};
