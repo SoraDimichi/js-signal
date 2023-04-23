@@ -1,53 +1,45 @@
 import { readFile, writeFile } from 'fs/promises';
+import { NEWS } from './consts';
+import { BaseData, Item } from './types';
 
-const main = async () => {
-  try {
-    // Read the file base.txt
-    const data = await readFile('base.txt', 'utf-8');
+const PATH_TO_BASE = './base.txt';
 
-    // Find REACTNEWSLETTER and take the number after it
-    const match = data.match(/REACTNEWSLETTER (\d+)/);
-    if (!match) {
-      console.error('REACTNEWSLETTER not found');
-      return;
-    }
+const parseTextFileToObject = async (path = PATH_TO_BASE): Promise<BaseData> => {
+  const data = await readFile(path, 'utf-8');
+  return data.split('\n').reduce((acc, line) => {
+    const match = line.match(/(\w+) (\d+)/);
+    if (match === null) throw new Error(`Invalid: ${line}`);
 
-    const issueNumber = parseInt(match[1]) + 1;
-    const url = `https://reactnewsletter.com/issues/${issueNumber}`;
+    return {...acc, [match[1]]: Number(match[2])};
+  }, {});
+};
 
-    // Fetch the URL
-    const response = await fetch(url);
+const writeObjectToTextFile = async (data: Item[], path = PATH_TO_BASE): Promise<void> => {
+  const lines = data.map(({name, issue}) => `${name} ${issue}`);
+  const content = lines.join('\n');
+  await writeFile(path, content, 'utf-8');
+};
 
-    if (response.status === 404) {
-      console.log('Issue not found');
-      return;
-    }
+const setIssue = (base: BaseData, initial: Item[] = NEWS) => initial.reduce((acc: Item[], item: Item ) => {
+  const key = item.name;
+  if (!(key in base)) throw new Error(`Key ${key} not found in base`);
 
-    if (!response.ok) {
-      console.error('Error fetching the URL');
-      return;
-    }
+  return [...acc, { ...item, issue: base[key]} ];
+}, []);
 
-    // Post the link to the Discord webhook API
-    const discordWebhookUrl = 'http://discord.com/webhook';
-    const discordResponse = await fetch(discordWebhookUrl, {
+const checkURL = ({url, issue, ...p}: Item) => {
+  const newIssue = issue + 1;
+  const newUrl = url + newIssue;
+  return fetch(newUrl).then(() => ({...p, url: newUrl, issue: newIssue, updated: true})).catch(() => ({...p, url, issue, updated: false}));
+}
+
+const sendToDiscord = ({webhook, url, ...p}: Item) => fetch(webhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: url }),
-    });
+    }).then(() => ({...p, webhook, url, published: true })).catch(() => ({...p, webhook, url, published: false}));
 
-    if (!discordResponse.ok) {
-      console.error('Discord API trouble');
-      return;
-    }
-
-    // If everything is fine, write the new issue number to base.txt
-    const newData = data.replace(/REACTNEWSLETTER (\d+)/, `REACTNEWSLETTER ${issueNumber}`);
-    await writeFile('base.txt', newData, 'utf-8');
-    console.log('Issue number updated');
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
-main();
+const runner = () => parseTextFileToObject()
+.then((data) => Promise.all(setIssue(data).map(checkURL)))
+.then((data) => Promise.all(data.filter(({updated}: Item) => updated).map(sendToDiscord)))
+.then(writeObjectToTextFile);

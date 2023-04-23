@@ -1,4 +1,4 @@
-REACTNEWSLETTER 364
-STATUSCODE 336
-BYTES 181
-SMASHINGMAGAZINE 402
+reactnewsletter 364
+reactstatus 336
+bytes 181
+smashingmagazine 402
