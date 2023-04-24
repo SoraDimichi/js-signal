@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { Item } from "./types.js";
 
 dotenv.config();
