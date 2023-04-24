@@ -37,7 +37,7 @@ const checkURL = async ({ url, issue, ...p }: Item) => {
   return { ...p, url: newUrl, issue: newIssue, updated: status === 200 };
 };
 
-const fetchIssues = (data: Item[]) => Promise.all(data.map(checkURL));
+const checkIssues = (data: Item[]) => Promise.all(data.map(checkURL));
 
 const postToDiscord = ({ webhook, url, ...p }: Item) =>
   fetch(webhook, {
@@ -51,7 +51,7 @@ const postIssues = (data: Item[]) =>
 
 const runner = () =>
   Promise.resolve(syncWithBase(base))
-    .then(fetchIssues)
+    .then(checkIssues)
     .then(postIssues)
     .then(writeToBase)
     .catch(console.error);
