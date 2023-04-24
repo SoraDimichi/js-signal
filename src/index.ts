@@ -1,7 +1,7 @@
 import { access, writeFile } from "fs/promises";
-import base from "./base.json" assert { type: "json" };
-import { NEWS } from "./consts.js";
-import { BaseData, Item } from "./types.js";
+import base from "./base.json";
+import { NEWS } from "./consts";
+import { BaseData, Item } from "./types";
 const PATH_TO_BASE = "build/base.json";
 
 const writeToBase = async (

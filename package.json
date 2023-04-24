@@ -1,6 +1,5 @@
 {
   "name": "js-signal",
-  "type": "module",
   "version": "0.0.0",
   "description": "News updater",
   "main": "index",
