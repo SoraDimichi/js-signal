@@ -1,17 +1,22 @@
-import { writeFile } from "fs/promises";
-import base from "./base.json";
-import { NEWS } from "./consts";
-import { BaseData, Item } from "./types";
-
-const PATH_TO_BASE = "./base.txt";
+import { access, writeFile } from "fs/promises";
+import base from './base.json' assert { type: 'json' };
+import { NEWS } from "./consts.js";
+import { BaseData, Item } from "./types.js";
+const PATH_TO_BASE = "build/base.json";
 
 const writeObjectToJSON = async (
   data: Item[],
   path = PATH_TO_BASE,
   encode = "utf-8" as const
 ): Promise<void> => {
-  const newBase = data.map(({ name, issue }) => ({ [name]: issue }));
-  await writeFile(path, JSON.stringify(newBase), encode);
+  try {
+    access(path);
+  } catch {
+    throw new Error(`Base in ${path} not found`);
+  }
+
+  const newBase = data.reduce((acc, { name, issue }) => ({ ...acc, [name]: issue }), {});
+  await writeFile(path, JSON.stringify(newBase, null, 2), encode);
 };
 
 const setIssue = (base: BaseData, initial: Item[] = NEWS) =>
@@ -26,8 +31,7 @@ const checkURL = ({ url, issue, ...p }: Item) => {
   const newIssue = issue + 1;
   const newUrl = url + newIssue;
   return fetch(newUrl)
-    .then(() => ({ ...p, url: newUrl, issue: newIssue, updated: true }))
-    .catch(() => ({ ...p, url, issue, updated: false }));
+    .then(({status}) => (status === 200 ? { ...p, url: newUrl, issue: newIssue, updated: true } : { ...p, url, issue, updated: false }));
 };
 
 const sendToDiscord = ({ webhook, url, ...p }: Item) =>
@@ -36,15 +40,10 @@ const sendToDiscord = ({ webhook, url, ...p }: Item) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: url }),
   })
-    .then(() => ({ ...p, webhook, url, published: true }))
-    .catch(() => ({ ...p, webhook, url, published: false }));
+    .then(({status}) =>  ({ ...p, webhook, url, published: status === 200 }))
 
 const runner = () => Promise.all(setIssue(base).map(checkURL))
-    .then((data) =>
-      Promise.all(
-        data.filter(({ updated }: Item) => updated).map(sendToDiscord)
-      )
-    )
-    .then(writeObjectToJSON);
+    .then(async (data) => ([...data, ...await Promise.all(data.filter(({ updated }: Item) => updated).map(sendToDiscord))]))
+    .then(writeObjectToJSON).catch(console.error);
 
 runner();
