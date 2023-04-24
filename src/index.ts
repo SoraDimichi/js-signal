@@ -1,28 +1,17 @@
-import { readFile, writeFile } from "fs/promises";
+import { writeFile } from "fs/promises";
+import base from "./base.json";
 import { NEWS } from "./consts";
 import { BaseData, Item } from "./types";
 
 const PATH_TO_BASE = "./base.txt";
 
-const parseTextFileToObject = async (
-  path = PATH_TO_BASE
-): Promise<BaseData> => {
-  const data = await readFile(path, "utf-8");
-  return data.split("\n").reduce((acc, line) => {
-    const match = line.match(/(\w+) (\d+)/);
-    if (match === null) throw new Error(`Invalid: ${line}`);
-
-    return { ...acc, [match[1]]: Number(match[2]) };
-  }, {});
-};
-
-const writeObjectToTextFile = async (
+const writeObjectToJSON = async (
   data: Item[],
-  path = PATH_TO_BASE
+  path = PATH_TO_BASE,
+  encode = "utf-8" as const
 ): Promise<void> => {
-  const lines = data.map(({ name, issue }) => `${name} ${issue}`);
-  const content = lines.join("\n");
-  await writeFile(path, content, "utf-8");
+  const newBase = data.map(({ name, issue }) => ({ [name]: issue }));
+  await writeFile(path, JSON.stringify(newBase), encode);
 };
 
 const setIssue = (base: BaseData, initial: Item[] = NEWS) =>
@@ -50,12 +39,12 @@ const sendToDiscord = ({ webhook, url, ...p }: Item) =>
     .then(() => ({ ...p, webhook, url, published: true }))
     .catch(() => ({ ...p, webhook, url, published: false }));
 
-const runner = () =>
-  parseTextFileToObject()
-    .then((data) => Promise.all(setIssue(data).map(checkURL)))
+const runner = () => Promise.all(setIssue(base).map(checkURL))
     .then((data) =>
       Promise.all(
         data.filter(({ updated }: Item) => updated).map(sendToDiscord)
       )
     )
-    .then(writeObjectToTextFile);
+    .then(writeObjectToJSON);
+
+runner();
