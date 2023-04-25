@@ -1,7 +1,3 @@
-export type BaseData = {
-  [key: string]: number;
-};
-
 export type Item = {
   name: string;
   url: string;
@@ -9,4 +5,10 @@ export type Item = {
   issue: number;
   updated: boolean;
   published: boolean;
+};
+
+export type Base<T extends Readonly<Array<Pick<Item, 'name'>>>> = {
+  [K in T[number]['name']]: number;
+} & {
+  [key: string]: number;
 };

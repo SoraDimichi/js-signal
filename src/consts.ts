@@ -1,13 +1,10 @@
-import dotenv from "dotenv";
-import { Item } from "./types.js";
-
-dotenv.config();
+import { Item } from "./types";
 
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
 
 const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE } = process.env;
 
-export const NEWS: Item[] = [
+export const NEWS = [
   {
     name: "reactnewsletter",
     url: "https://reactnewsletter.com/issues/",
@@ -40,4 +37,4 @@ export const NEWS: Item[] = [
     updated: false,
     published: false,
   },
-];
+] as const;
