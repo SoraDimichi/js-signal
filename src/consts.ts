@@ -1,8 +1,7 @@
-import { Item } from "./types";
 
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
 
-const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE } = process.env;
+const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } = process.env;
 
 export const NEWS = [
   {
@@ -33,6 +32,14 @@ export const NEWS = [
     name: "smashingmagazine",
     url: "https://smashingmagazine.com/the-smashing-newsletter/smashing-newsletter-issue-",
     webhook: DISCORD_WEBHOOK_URL + SMASHINGMAGAZINE,
+    issue: 0,
+    updated: false,
+    published: false,
+  },
+  {
+    name: "webstandards",
+    url: "https://web-standards.ru/podcast/",
+    webhook: DISCORD_WEBHOOK_URL + WEBSTANDARDS,
     issue: 0,
     updated: false,
     published: false,
