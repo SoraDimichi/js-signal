@@ -1,8 +1,6 @@
-
 import { access, writeFile } from "fs/promises";
 import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
 import type { Base, Item } from "./types";
-
 
 type StringifyHumanReadable = <T extends NonNullable<object>>(obj: T) => string;
 const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
