@@ -3,9 +3,8 @@ import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
 import type { Base, Item } from "./types";
 
 type StringifyHumanReadable = <T extends NonNullable<object>>(obj: T) => string;
-const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
-  obj: T
-) => JSON.stringify(obj, null, 2);
+const stringifyHumanReadable: StringifyHumanReadable = (obj) =>
+  JSON.stringify(obj, null, 2);
 
 type WriteToBase = (
   data: Item[],
@@ -32,7 +31,12 @@ export const writeToBase: WriteToBase = async (
   });
 };
 
-export const syncWithBase = (base = BASE, initial = NEWS): Item[] =>
+type SyncWithBase = (
+  base?: Base<typeof NEWS>,
+  initial?: Readonly<Item[]>
+) => Item[];
+
+export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
   initial.reduce(
     (acc: Item[], item: Item) => [...acc, { ...item, issue: base[item.name] }],
     []
@@ -77,7 +81,8 @@ export const postToDiscord: PostToDiscord = async (p) => {
   return { ...p, webhook, name, url, issue: issuePublished, published };
 };
 
-export const postIssues = async (data: Item[]): Promise<Item[]> =>
+type PostIssues = (data: Item[]) => Promise<Item[]>;
+export const postIssues: PostIssues = async (data) =>
   await Promise.all(
     data.filter(({ updated }: Item) => updated).map(postToDiscord)
   ).catch((e: any) => {
