@@ -5,7 +5,7 @@ import type { Base, Item } from "./types";
 
 dotenv.config();
 
-type StringifyHumanReadable = <T extends object>(obj: T) => string;
+type StringifyHumanReadable = <T extends NonNullable<object>>(obj: T) => string;
 const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
   obj: T
 ) => JSON.stringify(obj, null, 2);
@@ -13,8 +13,7 @@ const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
 type WriteToBase = (
   data: Item[],
   base?: Base<typeof NEWS>,
-  path?: string,
-  encode?: string
+  path?: string
 ) => Promise<void>;
 
 export const writeToBase: WriteToBase = async (
@@ -42,27 +41,25 @@ export const syncWithBase = (base = BASE, initial = NEWS): Item[] =>
     []
   );
 
-export const checkURL = async ({
-  name,
-  url,
-  issue,
-  ...p
-}: Item): Promise<Item> => {
+type CheckURL = (p: Item) => Promise<Item>;
+export const checkURL: CheckURL = async (p) => {
+  const { url, name, issue } = p;
   const newIssue = issue + 1;
   const newUrl = `${url} + ${newIssue}`;
+
   const { status } = await fetch(newUrl);
   const updated = status === 200;
 
-  console.log(
-    `${name} ${issue} was ${updated ? "" : "not "}updated to ${newIssue}`
-  );
+  console.log(`${name} ${issue} was ${updated ? "" : "not "}updated`);
 
-  return { ...p, name, updated, url: newUrl, issue: newIssue };
+  return { ...p, name, updated, url: newUrl, issue };
 };
 
 type CheckIssues = (data: Item[]) => Promise<Item[]>;
 export const checkIssues: CheckIssues = async (data) =>
-  await Promise.all(data.map(checkURL)).catch((e) => { throw new Error(`checkIssues: ${e}`)});
+  await Promise.all(data.map(checkURL)).catch((e: any) => {
+    throw new Error(`checkIssues: ${String(e)}`);
+  });
 
 type PostToDiscord = (p: Item) => Promise<Item>;
 export const postToDiscord: PostToDiscord = async (p) => {
@@ -77,17 +74,19 @@ export const postToDiscord: PostToDiscord = async (p) => {
   console.log(
     `${name} ${issue} was ${published ? "" : "not "}published to Discord`
   );
-  const issueRollbacked = published ? issue : issue - 1;
+  const issuePublished = published ? issue + 1 : issue;
 
-  return { ...p, webhook, name, url, issue: issueRollbacked, published };
+  return { ...p, webhook, name, url, issue: issuePublished, published };
 };
 
 export const postIssues = async (data: Item[]): Promise<Item[]> =>
   await Promise.all(
     data.filter(({ updated }: Item) => updated).map(postToDiscord)
-  ).catch((e) => { throw new Error(`postIssues: ${e}`)});
+  ).catch((e: any) => {
+    throw new Error(`postIssues: ${String(e)}`);
+  });
 
-(async (): Promise<void> => {
+void (async (): Promise<void> => {
   await Promise.resolve(syncWithBase())
     .then(checkIssues)
     .then(postIssues)
