@@ -77,8 +77,9 @@ export const postToDiscord: PostToDiscord = async (p) => {
   console.log(
     `${name} ${issue} was ${published ? "" : "not "}published to Discord`
   );
+  const issueRollbacked = published ? issue : issue - 1;
 
-  return { ...p, webhook, name, url, issue, published };
+  return { ...p, webhook, name, url, issue: issueRollbacked, published };
 };
 
 export const postIssues = async (data: Item[]): Promise<Item[]> =>
