@@ -7,8 +7,6 @@ export type Item = {
   published: boolean;
 };
 
-export type Base<T extends Readonly<Array<Pick<Item, 'name'>>>> = {
-  [K in T[number]['name']]: number;
-} & {
-  [key: string]: number;
-};
+export type Base<T extends Readonly<Array<Pick<Item, "name">>>> = {
+  [K in T[number]["name"]]: number;
+} & Record<string, number>;

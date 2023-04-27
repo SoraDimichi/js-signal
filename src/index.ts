@@ -1,60 +1,95 @@
 import dotenv from "dotenv";
+import { access, writeFile } from "fs/promises";
+import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
+import type { Base, Item } from "./types";
+
 dotenv.config();
 
-import { access, writeFile } from "fs/promises";
-import baseData from "./base.json";
-import { NEWS } from "./consts";
-import { Base, Item } from "./types";
-const PATH_TO_BASE = "build/base.json";
+type StringifyHumanReadable = <T extends object>(obj: T) => string;
+const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
+  obj: T
+) => JSON.stringify(obj, null, 2);
 
-const b:Base<typeof NEWS> = baseData; 
-
-export const writeToBase = async (
+type WriteToBase = (
   data: Item[],
-  base = b,
-  path = PATH_TO_BASE,
-  encode = "utf-8" as const
-): Promise<void> => {
-  try {
-    access(path);
-  } catch {
+  base?: Base<typeof NEWS>,
+  path?: string,
+  encode?: string
+) => Promise<void>;
+
+export const writeToBase: WriteToBase = async (
+  data: Item[],
+  base = BASE,
+  path = TO_BASE
+) => {
+  await access(path).catch(() => {
     throw new Error(`Base in ${path} not found`);
-  }
+  });
 
   const newBase = {
     ...base,
     ...data.reduce((acc, { name, issue }) => ({ ...acc, [name]: issue }), {}),
   };
-  await writeFile(path, JSON.stringify(newBase, null, 2), encode);
+
+  await writeFile(path, stringifyHumanReadable(newBase), ENCODE).catch(() => {
+    throw new Error(`Error writing to ${path}`);
+  });
 };
 
-export const syncWithBase = (base = b, initial = NEWS) =>
-  initial.reduce((acc: Item[], item: Item) => [...acc, { ...item, issue: base[item.name] }], []);
+export const syncWithBase = (base = BASE, initial = NEWS): Item[] =>
+  initial.reduce(
+    (acc: Item[], item: Item) => [...acc, { ...item, issue: base[item.name] }],
+    []
+  );
 
-export const checkURL = async ({ url, issue, ...p }: Item) => {
+export const checkURL = async ({
+  name,
+  url,
+  issue,
+  ...p
+}: Item): Promise<Item> => {
   const newIssue = issue + 1;
-  const newUrl = url + newIssue;
+  const newUrl = `${url} + ${newIssue}`;
   const { status } = await fetch(newUrl);
-  return { ...p, url: newUrl, issue: newIssue, updated: status === 200 };
+  const updated = status === 200;
+
+  console.log(
+    `${name} ${issue} was ${updated ? "" : "not "}updated to ${newIssue}`
+  );
+
+  return { ...p, name, updated, url: newUrl, issue: newIssue };
 };
 
-export const checkIssues = (data: Item[]) => Promise.all(data.map(checkURL));
+type CheckIssues = (data: Item[]) => Promise<Item[]>;
+export const checkIssues: CheckIssues = async (data) =>
+  await Promise.all(data.map(checkURL)).catch((e) => { throw new Error(`checkIssues: ${e}`)});
 
-export const postToDiscord = ({ webhook, url, ...p }: Item) =>
-  fetch(webhook, {
+type PostToDiscord = (p: Item) => Promise<Item>;
+export const postToDiscord: PostToDiscord = async (p) => {
+  const { webhook, url, name, issue } = p;
+  const { status } = await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: url }),
-  }).then(({ status }) => ({ ...p, webhook, url, published: status === 200 }));
+  });
+  const published = status === 200;
 
-export const postIssues = (data: Item[]) =>
-  Promise.all(data.filter(({ updated }: Item) => updated).map(postToDiscord));
+  console.log(
+    `${name} ${issue} was ${published ? "" : "not "}published to Discord`
+  );
 
-export const runner = () =>
-  Promise.resolve(syncWithBase())
+  return { ...p, webhook, name, url, issue, published };
+};
+
+export const postIssues = async (data: Item[]): Promise<Item[]> =>
+  await Promise.all(
+    data.filter(({ updated }: Item) => updated).map(postToDiscord)
+  ).catch((e) => { throw new Error(`postIssues: ${e}`)});
+
+(async (): Promise<void> => {
+  await Promise.resolve(syncWithBase())
     .then(checkIssues)
     .then(postIssues)
     .then(writeToBase)
     .catch(console.error);
-
-runner();
+})();

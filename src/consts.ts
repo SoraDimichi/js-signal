@@ -1,7 +1,16 @@
+import baseData from "./base.json";
+import type { Base } from "./types";
 
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
 
-const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } = process.env;
+Object.entries(process.env).forEach(([key, value]) => {
+  if (value === undefined) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
+});
+
+const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } =
+  process.env as Record<string, string>;
 
 export const NEWS = [
   {
@@ -45,3 +54,7 @@ export const NEWS = [
     published: false,
   },
 ] as const;
+
+export const TO_BASE = "build/base.json";
+export const ENCODE = "utf-8";
+export const BASE: Base<typeof NEWS> = baseData;
