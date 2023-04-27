@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
+
 import { access, writeFile } from "fs/promises";
 import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
 import type { Base, Item } from "./types";
 
-dotenv.config();
 
 type StringifyHumanReadable = <T extends NonNullable<object>>(obj: T) => string;
 const stringifyHumanReadable: StringifyHumanReadable = <T extends object>(
@@ -45,12 +44,12 @@ type CheckURL = (p: Item) => Promise<Item>;
 export const checkURL: CheckURL = async (p) => {
   const { url, name, issue } = p;
   const newIssue = issue + 1;
-  const newUrl = `${url} + ${newIssue}`;
+  const newUrl = `${url}${newIssue}`;
 
   const { status } = await fetch(newUrl);
   const updated = status === 200;
 
-  console.log(`${name} ${issue} was ${updated ? "" : "not "}updated`);
+  console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
   return { ...p, name, updated, url: newUrl, issue };
 };
@@ -69,6 +68,7 @@ export const postToDiscord: PostToDiscord = async (p) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: url }),
   });
+  console.log(webhook);
   const published = status === 200;
 
   console.log(

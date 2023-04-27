@@ -1,13 +1,10 @@
+import dotenv from "dotenv";
 import baseData from "./base.json";
 import type { Base } from "./types";
 
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
+dotenv.config();
 
-Object.entries(process.env).forEach(([key, value]) => {
-  if (value === undefined) {
-    throw new Error(`Missing environment variable: ${key}`);
-  }
-});
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
 
 const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } =
   process.env as Record<string, string>;
