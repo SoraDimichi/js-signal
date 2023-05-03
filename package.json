@@ -27,6 +27,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "msw": "^1.2.1",
     "prettier": "^2.8.8",
-    "typescript": "*"
+    "typescript": "5.0.4"
   }
 }

@@ -18,7 +18,7 @@ export const writeToBase: WriteToBase = async (
   path = TO_BASE
 ) => {
   await access(path).catch(() => {
-    throw new Error(`Base in ${path} not found`);
+    throw new Error(`writeToBase: Base in ${path} not found`);
   });
 
   const newBase = {
@@ -27,7 +27,7 @@ export const writeToBase: WriteToBase = async (
   };
 
   await writeFile(path, stringifyHumanReadable(newBase), ENCODE).catch(() => {
-    throw new Error(`Error writing to ${path}`);
+    throw new Error(`writeToBase: Error writing to ${path}`);
   });
 };
 
@@ -68,10 +68,9 @@ export const postToDiscord: PostToDiscord = async (p) => {
   const { status } = await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: url }),
+    body: `{"content": "${url}"}`,
   });
-  console.log(webhook);
-  const published = status === 200;
+  const published = status === 204;
 
   console.log(
     `${name} ${issue} was ${published ? "" : "not "}published to Discord`
