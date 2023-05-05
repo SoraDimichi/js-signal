@@ -1,4 +1,5 @@
 import { access, writeFile } from "fs/promises";
+import { get } from "https";
 import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
 import type { Base, Item } from "./types";
 
@@ -42,14 +43,23 @@ export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
     []
   );
 
+const checkStatus = async (url: string): Promise<number> =>
+  await new Promise((resolve, reject) => {
+    get(url, ({ statusCode }) => {
+      resolve(statusCode ?? 408);
+    }).on("error", reject);
+  });
+
 type CheckURL = (p: Item) => Promise<Item>;
 export const checkURL: CheckURL = async (p) => {
   const { url, name, issue } = p;
+
   const newIssue = issue + 1;
   const newUrl = `${url}${newIssue}`;
 
-  const { status } = await fetch(newUrl);
-  const updated = status === 200;
+  const statusCode = await checkStatus(newUrl);
+
+  const updated = statusCode === 200;
 
   console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
