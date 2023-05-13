@@ -99,9 +99,12 @@ export const postIssues: PostIssues = async (data) =>
   });
 
 void (async (): Promise<void> => {
-  await Promise.resolve(syncWithBase())
-    .then(checkIssues)
-    .then(postIssues)
-    .then(writeToBase)
-    .catch(console.error);
+  try {
+    await Promise.resolve(syncWithBase())
+      .then(checkIssues)
+      .then(postIssues)
+      .then(writeToBase);
+  } catch (e) {
+    console.error(e);
+  }
 })();

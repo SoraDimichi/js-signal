@@ -52,6 +52,6 @@ export const NEWS = [
   },
 ] as const;
 
-export const TO_BASE = "build/base.json";
+export const TO_BASE = "./src/base.json";
 export const ENCODE = "utf-8";
 export const BASE: Base<typeof NEWS> = baseData;
