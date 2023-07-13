@@ -52,10 +52,10 @@ const checkStatus = async (url: string): Promise<number> =>
 
 type CheckURL = (p: Item) => Promise<Item>;
 export const checkURL: CheckURL = async (p) => {
-  const { url, name, issue } = p;
+  const { url, name, issue, trailingSlash } = p;
 
   const newIssue = issue + 1;
-  const newUrl = `${url}${newIssue}`;
+  const newUrl = `${url}${newIssue}${trailingSlash ? "/" : ""}`;
 
   const statusCode = await checkStatus(newUrl);
 
