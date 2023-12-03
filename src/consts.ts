@@ -4,7 +4,7 @@ import type { Base } from "./types";
 
 dotenv.config();
 
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/";
+const WEBHOOK_BASE = "https://discord.com/api/webhooks/";
 
 const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } =
   process.env as Record<string, string>;
@@ -13,7 +13,7 @@ export const NEWS = [
   {
     name: "reactnewsletter",
     url: "https://reactnewsletter.com/issues/",
-    webhook: DISCORD_WEBHOOK_URL + REACTNEWSLETTER,
+    webhook: WEBHOOK_BASE + REACTNEWSLETTER,
     trailingSlash: false,
     issue: 0,
     updated: false,
@@ -22,7 +22,7 @@ export const NEWS = [
   {
     name: "reactstatus",
     url: "https://react.statuscode.com/issues/",
-    webhook: DISCORD_WEBHOOK_URL + REACTSTATUS,
+    webhook: WEBHOOK_BASE + REACTSTATUS,
     trailingSlash: false,
     issue: 0,
     updated: false,
@@ -31,7 +31,7 @@ export const NEWS = [
   {
     name: "bytes",
     url: "https://bytes.dev/archives/",
-    webhook: DISCORD_WEBHOOK_URL + BYTES,
+    webhook: WEBHOOK_BASE + BYTES,
     trailingSlash: false,
     issue: 0,
     updated: false,
@@ -40,7 +40,7 @@ export const NEWS = [
   {
     name: "smashingmagazine",
     url: "https://www.smashingmagazine.com/the-smashing-newsletter/smashing-newsletter-issue-",
-    webhook: DISCORD_WEBHOOK_URL + SMASHINGMAGAZINE,
+    webhook: WEBHOOK_BASE + SMASHINGMAGAZINE,
     trailingSlash: true,
     issue: 0,
     updated: false,
@@ -49,7 +49,7 @@ export const NEWS = [
   {
     name: "webstandards",
     url: "https://web-standards.ru/podcast/",
-    webhook: DISCORD_WEBHOOK_URL + WEBSTANDARDS,
+    webhook: WEBHOOK_BASE + WEBSTANDARDS,
     trailingSlash: true,
     issue: 0,
     updated: false,

@@ -6,7 +6,7 @@
   "author": "Dmitry Sorokin",
   "license": "MIT",
   "scripts": {
-    "run": "npx ts-node src/index.ts",
+    "poll": "npx ts-node src/index.ts",
     "lint": "eslint ./src/ --ext .ts && prettier --write ./src/"
   },
   "dependencies": {
