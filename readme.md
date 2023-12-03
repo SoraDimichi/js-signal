@@ -3,7 +3,7 @@
 This script monitors popular internet magazines for developers and sends links to a Discord channel when new articles are published. It currently tracks smashingmagazine.com, reactjs.org, web-standards.ru, bytes.su, and reactjsnews.com.
 ## How to run:
 
-1. (https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)[Create a Discord channel] for each internet magazine, titled with the magazine's name (e.g., smashingmagazine, reactjs, webstandards, bytes, reactjsnews).
+1. [https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks](Create a Discord channel) for each internet magazine, titled with the magazine's name (e.g., smashingmagazine, reactjs, webstandards, bytes, reactjsnews).
 2. Generate a webhook for each channel you wish to receive updates in.
 3. Create a `.env` file at the root with the following format:
 ```
