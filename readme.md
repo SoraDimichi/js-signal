@@ -37,7 +37,7 @@ const NEWS = [{
 3. Add the new magazine in the `NEWS` (description above), don't forget to add the same private values `issue`, `updated`, `published`.
 4. Add the issue number to the `base.json` file.
 
-TODO: 
+### TODO: 
 
 1. Data organization could be improved:
 * Input data might be better stored in a separate file.
