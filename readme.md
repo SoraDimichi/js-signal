@@ -1,6 +1,6 @@
 # Signal JS
 
-This script monitors popular internet magazines for developers and sends links to a Discord channel when new articles are published. It currently tracks smashingmagazine.com, reactjs.org, web-standards.ru, bytes.su, and reactjsnews.com.
+This script monitors popular internet magazines for developers and sends links to a Discord channel when new articles are published. It currently tracks smashingmagazine, reactjs, web-standards, bytes, graphql-weekly, this-week-in-react, and reactjsnews.
 ## How to run:
 
 1. [Create a Discord channel](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) for each internet magazine, titled with the magazine's name (e.g., smashingmagazine, reactjs, webstandards, bytes, reactjsnews).
