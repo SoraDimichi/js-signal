@@ -6,8 +6,15 @@ dotenv.config();
 
 const WEBHOOK_BASE = "https://discord.com/api/webhooks/";
 
-const { REACTNEWSLETTER, REACTSTATUS, BYTES, SMASHINGMAGAZINE, WEBSTANDARDS } =
-  process.env as Record<string, string>;
+const {
+  REACTNEWSLETTER,
+  REACTSTATUS,
+  BYTES,
+  SMASHINGMAGAZINE,
+  WEBSTANDARDS,
+  GRAPHQLWEEKLY,
+  THISWEEKINREACT,
+} = process.env as Record<string, string>;
 
 export const NEWS = [
   {
@@ -23,6 +30,24 @@ export const NEWS = [
     name: "reactstatus",
     url: "https://react.statuscode.com/issues/",
     webhook: WEBHOOK_BASE + REACTSTATUS,
+    trailingSlash: false,
+    issue: 0,
+    updated: false,
+    published: false,
+  },
+  {
+    name: "graphqlweekly",
+    url: "https://graphqlweekly.com/issues/",
+    webhook: WEBHOOK_BASE + GRAPHQLWEEKLY,
+    trailingSlash: true,
+    issue: 0,
+    updated: false,
+    published: false,
+  },
+  {
+    name: "thisweekinreact",
+    url: "https://thisweekinreact.com/issues/",
+    webhook: WEBHOOK_BASE + THISWEEKINREACT,
     trailingSlash: false,
     issue: 0,
     updated: false,
