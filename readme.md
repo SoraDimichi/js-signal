@@ -37,6 +37,11 @@ const NEWS = [{
 3. Add the new magazine in the `NEWS` (description above), don't forget to add the same private values `issue`, `updated`, `published`.
 4. Add the issue number to the `base.json` file.
 
+## How to add a script to cron scheduler
+1. run in project `sudo chmod +x run.sh`
+2. `crontab -e`, choose editor, add a line `00 15 * * * echo "[ $(date '+%Y-%m-%d %H:%M:%S') ]" >> /home/soradimichi/js-signal/signal.log 2>&1; /home/soradimichi/js-signal/run.sh`
+3. Verify Cron job `crontab -l`
+
 ### TODO: 
 
 1. Data organization could be improved:
