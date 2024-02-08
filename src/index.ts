@@ -1,6 +1,6 @@
 import { access, writeFile } from "fs/promises";
 import { get } from "https";
-import { BASE, ENCODE, NEWS, TO_BASE } from "./consts";
+import { BASE, ENCODE, NEWS, TO_BASE, WEBHOOK_BASE } from "./consts";
 import type { Base, Item } from "./types";
 
 type StringifyHumanReadable = <T extends NonNullable<object>>(obj: T) => string;
@@ -32,14 +32,14 @@ export const writeToBase: WriteToBase = async (
   });
 };
 
-type SyncWithBase = (
-  base?: Base<typeof NEWS>,
-  initial?: Readonly<Item[]>
-) => Item[];
+type SyncWithBase = (base?: Base<typeof NEWS>, initial?: typeof NEWS) => Item[];
 
 export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
-  initial.reduce(
-    (acc: Item[], item: Item) => [...acc, { ...item, issue: base[item.name] }],
+  initial.reduce<Item[]>(
+    (acc, item) => [
+      ...acc,
+      { ...item, issue: base[item.name], updated: false, published: false },
+    ],
     []
   );
 
@@ -75,7 +75,7 @@ export const checkIssues: CheckIssues = async (data) =>
 type PostToDiscord = (p: Item) => Promise<Item>;
 export const postToDiscord: PostToDiscord = async (p) => {
   const { webhook, url, name, issue } = p;
-  const { status } = await fetch(webhook, {
+  const { status } = await fetch(WEBHOOK_BASE + webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: `{"content": "${url}"}`,

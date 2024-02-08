@@ -1,9 +1,16 @@
 {
+  "newsvuejs": 18,
+  "webtoolsweekly": 550,
+  "mobiledevweekly": 382,
+  "frontendfoc": 628,
+  "jster": 211,
+  "nodeweekly": 519,
+  "javascriptweekly": 673,
+  "graphqlweekly": 339,
+  "thisweekinreact": 172,
   "reactnewsletter": 398,
   "reactstatus": 373,
   "bytes": 260,
   "smashingmagazine": 442,
-  "webstandards": 403,
-  "graphqlweekly": 339,
-  "thisweekinreact": 172
+  "webstandards": 403
 }

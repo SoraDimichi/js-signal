@@ -4,7 +4,7 @@ import type { Base } from "./types";
 
 dotenv.config();
 
-const WEBHOOK_BASE = "https://discord.com/api/webhooks/";
+export const WEBHOOK_BASE = "https://discord.com/api/webhooks/";
 
 const {
   REACTNEWSLETTER,
@@ -14,71 +14,92 @@ const {
   WEBSTANDARDS,
   GRAPHQLWEEKLY,
   THISWEEKINREACT,
+  JAVASCRIPTWEEKLY,
+  NODEWEEKLY,
+  JSTER,
+  FRONTENDFOC,
+  WEBTOOLSWEEKLY,
+  NEWSVUEJS,
 } = process.env as Record<string, string>;
 
 export const NEWS = [
   {
-    name: "reactnewsletter",
-    url: "https://reactnewsletter.com/issues/",
-    webhook: WEBHOOK_BASE + REACTNEWSLETTER,
+    name: "newsvuejs",
+    url: "https://news.vuejs.org/issues/",
+    webhook: NEWSVUEJS,
     trailingSlash: false,
-    issue: 0,
-    updated: false,
-    published: false,
   },
   {
-    name: "reactstatus",
-    url: "https://react.statuscode.com/issues/",
-    webhook: WEBHOOK_BASE + REACTSTATUS,
+    name: "webtoolsweekly",
+    url: "https://webtoolsweekly.com/archives/issue-",
+    webhook: WEBTOOLSWEEKLY,
+    trailingSlash: true,
+  },
+  {
+    name: "frontendfoc",
+    url: "https://frontendfoc.us/issues/",
+    webhook: FRONTENDFOC,
     trailingSlash: false,
-    issue: 0,
-    updated: false,
-    published: false,
+  },
+  {
+    name: "jster",
+    url: "https://jster.net/blog/jster-",
+    webhook: JSTER,
+    trailingSlash: true,
+  },
+  {
+    name: "nodeweekly",
+    url: "https://nodeweekly.com/issues/",
+    webhook: NODEWEEKLY,
+    trailingSlash: false,
+  },
+  {
+    name: "javascriptweekly",
+    url: "https://javascriptweekly.com/issues/",
+    webhook: JAVASCRIPTWEEKLY,
+    trailingSlash: false,
   },
   {
     name: "graphqlweekly",
     url: "https://graphqlweekly.com/issues/",
-    webhook: WEBHOOK_BASE + GRAPHQLWEEKLY,
+    webhook: GRAPHQLWEEKLY,
     trailingSlash: true,
-    issue: 0,
-    updated: false,
-    published: false,
   },
   {
     name: "thisweekinreact",
-    url: "https://thisweekinreact.com/issues/",
-    webhook: WEBHOOK_BASE + THISWEEKINREACT,
+    url: "https://thisweekinreact.com/newsletter/",
+    webhook: THISWEEKINREACT,
     trailingSlash: false,
-    issue: 0,
-    updated: false,
-    published: false,
+  },
+  {
+    name: "reactnewsletter",
+    url: "https://reactnewsletter.com/issues/",
+    webhook: REACTNEWSLETTER,
+    trailingSlash: false,
+  },
+  {
+    name: "reactstatus",
+    url: "https://react.statuscode.com/issues/",
+    webhook: REACTSTATUS,
+    trailingSlash: false,
   },
   {
     name: "bytes",
     url: "https://bytes.dev/archives/",
-    webhook: WEBHOOK_BASE + BYTES,
+    webhook: BYTES,
     trailingSlash: false,
-    issue: 0,
-    updated: false,
-    published: false,
   },
   {
     name: "smashingmagazine",
     url: "https://www.smashingmagazine.com/the-smashing-newsletter/smashing-newsletter-issue-",
-    webhook: WEBHOOK_BASE + SMASHINGMAGAZINE,
+    webhook: SMASHINGMAGAZINE,
     trailingSlash: true,
-    issue: 0,
-    updated: false,
-    published: false,
   },
   {
     name: "webstandards",
     url: "https://web-standards.ru/podcast/",
-    webhook: WEBHOOK_BASE + WEBSTANDARDS,
+    webhook: WEBSTANDARDS,
     trailingSlash: true,
-    issue: 0,
-    updated: false,
-    published: false,
   },
 ] as const;
 
