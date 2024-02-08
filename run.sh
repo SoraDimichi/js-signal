@@ -1,3 +1,3 @@
 #!/bin/bash
 
- npm run poll > signal.log
+ npm run poll >> signal.log
