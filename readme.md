@@ -41,7 +41,7 @@ const NEWS = [{
 1. run in project `sudo chmod +x run.sh`
 2. `crontab -e`, choose editor, add a line
 ```  
-00 15 * * * echo "[ $(date '+%Y-%m-%d %H:%M:%S') ]" >> /home/soradimichi/js-signal/signal.log 2>&1; /home/soradimichi/js-signal/run.sh
+00 15 * * * echo "[ $(date '+%Y-%m-%d %H:%M:%S') ]" >> /absolute/path/to/js-signal/signal.log 2>&1; /absolute/path/to/js-signal/run.sh
 ```
 3. Verify Cron job `crontab -l`
 
