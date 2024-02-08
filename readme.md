@@ -40,21 +40,14 @@ const NEWS = [{
 ## How to add a script to cron scheduler
 1. run in project `sudo chmod +x run.sh`
 2. `crontab -e`, choose editor, add a line
-```  
-00 15 * * * echo "[ $(date '+%Y-%m-%d %H:%M:%S') ]" >> /absolute/path/to/js-signal/signal.log 2>&1; /absolute/path/to/js-signal/run.sh
+```
+30 15 * * * cd /path/to/js-signal; echo "[ $(date '+\%Y-\%m-\%d \%H:\%M:\%S') ]" >> signal.log 2>&1; ./run.sh >> signal.log 2>&0
 ```
 3. Verify Cron job `crontab -l`
 
-### TODO: 
+### TODO:
 
 1. Data organization could be improved:
 * Input data might be better stored in a separate file.
 * Accessing data from the .env file might be streamlined by using the name key from the NEWS item.
 2. Consider adding automatic detection for trailing slashes in URL.
-
-
-
-
-
-
-
