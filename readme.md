@@ -39,8 +39,10 @@ const NEWS = [{
 
 ## How to add a script to cron scheduler
 1. run in project `sudo chmod +x run.sh`
-2. `crontab -e`, choose editor, add a line
+2. `crontab -e`, choose editor, add
 ```
+MAILTO=""
+
 30 15 * * * cd /path/to/js-signal; echo "[ $(date '+\%Y-\%m-\%d \%H:\%M:\%S') ]" >> signal.log 2>&1; ./run.sh >> signal.log 2>&0
 ```
 3. Verify Cron job `crontab -l`
