@@ -46,6 +46,8 @@ export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
 const checkStatus = async (url: string): Promise<number> =>
   await new Promise((resolve, reject) => {
     get(url, ({ statusCode }) => {
+      console.log(`url: ${url}`);
+      console.log(`statusCode: ${String(statusCode)}`);
       resolve(statusCode ?? 408);
     }).on("error", reject);
   });
@@ -59,7 +61,7 @@ export const checkURL: CheckURL = async (p) => {
 
   const statusCode = await checkStatus(newUrl);
 
-  const updated = statusCode === 200;
+  const updated = [200, 304].some((code) => code === statusCode);
 
   console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
