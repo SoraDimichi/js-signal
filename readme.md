@@ -24,9 +24,7 @@ WEBSTANDARDS="WEBSTANDARDS_CHANNEL_UNIQUE_PATH"
 const NEWS = [{
   name: "reactnewsletter", // the magazine's name, should match the one in `base.json`
   url: "https://reactnewsletter.com/issues/", // the base URL of the magazine
-  webhook: DISCORD_WEBHOOK_URL + REACTNEWSLETTER, // Discord webhook URL + variable from .env file
-  trailingSlash: false, // set to `true` if the magazine's URL ends with a slash, otherwise `false`
-  ...otherPrivateValues // ignore these
+  webhook: REACTNEWSLETTER, // Discord webhook URL + variable from .env file
 }]
 ```
 
@@ -60,12 +58,11 @@ MAILTO=""
 - https://codemyui.com/strikethrough-text-with-explanations-in-modal-on-hover/
 - https://www.allthingstypescript.dev/archive
 - https://www.fullctx.dev/archive
-3. Add vue items
+3. Add vue items https://vuejs.org/ecosystem/newsletters
 
 #### Refactoring:
 
 1. Data organization could be improved:
 * Input data might be better stored in a separate file.
 * Accessing data from the .env file might be streamlined by using the name key from the NEWS item.
-2. Consider adding automatic detection for trailing slashes in URL.
-3. Organze logging process better (in one string)
+2. Organze logging process better (in one string)
