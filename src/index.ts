@@ -61,7 +61,7 @@ export const checkURL: CheckURL = async (p) => {
 
   const statusCode = await checkStatus(newUrl);
 
-  const updated = [200, 304].some((code) => code === statusCode);
+  const updated = [200, 301].some((code) => code === statusCode);
 
   console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
