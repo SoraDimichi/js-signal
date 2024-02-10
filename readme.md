@@ -53,3 +53,4 @@ MAILTO=""
 * Input data might be better stored in a separate file.
 * Accessing data from the .env file might be streamlined by using the name key from the NEWS item.
 2. Consider adding automatic detection for trailing slashes in URL.
+3. Organze logging process better (in one string)
