@@ -16,7 +16,6 @@ const {
   THISWEEKINREACT,
   JAVASCRIPTWEEKLY,
   NODEWEEKLY,
-  JSTER,
   FRONTENDFOC,
   WEBTOOLSWEEKLY,
   NEWSVUEJS,
@@ -43,11 +42,6 @@ export const NEWS = [
     name: "frontendfoc",
     url: "https://frontendfoc.us/issues/",
     webhook: FRONTENDFOC,
-  },
-  {
-    name: "jster",
-    url: "https://jster.net/blog/jster-",
-    webhook: JSTER,
   },
   {
     name: "nodeweekly",

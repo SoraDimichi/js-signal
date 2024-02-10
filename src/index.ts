@@ -50,7 +50,8 @@ export const checkURL: CheckURL = async (p) => {
   const urlNew = new URL(`${url}${newIssue}`);
   const res = await fetch(urlNew, { redirect: "follow" });
   const urlRes = new URL(res.url);
-  const updated = urlRes.pathname.includes(urlNew.pathname);
+  const pathMatches = urlRes.pathname.includes(urlNew.pathname);
+  const updated = pathMatches && res.status === 200;
 
   console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
