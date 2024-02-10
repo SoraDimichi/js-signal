@@ -1,7 +1,6 @@
 export type Item = {
   name: string;
   url: string;
-  trailingSlash: boolean;
   webhook: string;
   issue: number;
   updated: boolean;

@@ -1,5 +1,4 @@
 import { access, writeFile } from "fs/promises";
-import { get } from "https";
 import { BASE, ENCODE, NEWS, TO_BASE, WEBHOOK_BASE } from "./consts";
 import type { Base, Item } from "./types";
 
@@ -43,27 +42,19 @@ export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
     []
   );
 
-const checkStatus = async (url: string): Promise<number> =>
-  await new Promise((resolve, reject) => {
-    get(url, ({ statusCode }) => {
-      resolve(statusCode ?? 408);
-    }).on("error", reject);
-  });
-
 type CheckURL = (p: Item) => Promise<Item>;
 export const checkURL: CheckURL = async (p) => {
-  const { url, name, issue, trailingSlash } = p;
+  const { url, name, issue } = p;
 
   const newIssue = issue + 1;
-  const newUrl = `${url}${newIssue}${trailingSlash ? "/" : ""}`;
-
-  const statusCode = await checkStatus(newUrl);
-
-  const updated = [200, 301].some((code) => code === statusCode);
+  const urlNew = new URL(`${url}${newIssue}`);
+  const res = await fetch(urlNew, { redirect: "follow" });
+  const urlRes = new URL(res.url);
+  const updated = urlRes.pathname.includes(urlNew.pathname);
 
   console.log(`${name} was ${updated ? "" : "not "}updated to ${newIssue}`);
 
-  return { ...p, name, updated, url: newUrl, issue };
+  return { ...p, name, updated, url: urlRes.toString(), issue };
 };
 
 type CheckIssues = (data: Item[]) => Promise<Item[]>;
