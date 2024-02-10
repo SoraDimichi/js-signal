@@ -58,6 +58,9 @@ MAILTO=""
 2. Try parsing blogs
 - https://moderncss.dev/
 - https://codemyui.com/strikethrough-text-with-explanations-in-modal-on-hover/
+- https://www.allthingstypescript.dev/archive
+- https://www.fullctx.dev/archive
+3. Add vue items
 
 #### Refactoring:
 
