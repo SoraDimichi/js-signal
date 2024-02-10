@@ -46,8 +46,6 @@ export const syncWithBase: SyncWithBase = (base = BASE, initial = NEWS) =>
 const checkStatus = async (url: string): Promise<number> =>
   await new Promise((resolve, reject) => {
     get(url, ({ statusCode }) => {
-      console.log(`url: ${url}`);
-      console.log(`statusCode: ${String(statusCode)}`);
       resolve(statusCode ?? 408);
     }).on("error", reject);
   });
