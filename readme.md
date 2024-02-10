@@ -49,6 +49,11 @@ MAILTO=""
 
 ### TODO:
 
+1. Understand how to handle issueless https://ecmascript.news/archive.html, https://javascriptkicks.com/articles/631682/jsk-weekly-31-january-2024
+2. Manage mailchimp archives https://us3.campaign-archive.com/?u=4ad274b490aa6da8c2d29b775&id=83f722c2d3, https://us14.campaign-archive.com/home/?u=809daf9442ece0a92a3d65f99&id=5693c0ed42
+
+#### Refactoring:
+
 1. Data organization could be improved:
 * Input data might be better stored in a separate file.
 * Accessing data from the .env file might be streamlined by using the name key from the NEWS item.
