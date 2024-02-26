@@ -18,7 +18,6 @@ const {
   NODEWEEKLY,
   FRONTENDFOC,
   WEBTOOLSWEEKLY,
-  NEWSVUEJS,
   NEXTJSWEEKLY,
 } = process.env as Record<string, string>;
 
@@ -27,11 +26,6 @@ export const NEWS = [
     name: "nextjsweekly",
     url: "https://nextjsweekly.com/issues/",
     webhook: NEXTJSWEEKLY,
-  },
-  {
-    name: "newsvuejs",
-    url: "https://news.vuejs.org/issues/",
-    webhook: NEWSVUEJS,
   },
   {
     name: "webtoolsweekly",
