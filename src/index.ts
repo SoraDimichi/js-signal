@@ -72,12 +72,15 @@ export const postToDiscord: PostToDiscord = async (p) => {
     headers: { "Content-Type": "application/json" },
     body: `{"content": "${url}"}`,
   });
+
   const published = status === 204;
+  const newIssue = issue + 1;
 
   console.log(
-    `${name} ${issue} was ${published ? "" : "not "}published to Discord`
+    `${name} ${newIssue} was ${published ? "" : "not "}published to Discord`
   );
-  const issuePublished = published ? issue + 1 : issue;
+
+  const issuePublished = published ? newIssue : issue;
 
   return { ...p, webhook, name, url, issue: issuePublished, published };
 };
